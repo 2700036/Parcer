@@ -12,7 +12,7 @@ import {
 
 import MailIcon from '@material-ui/icons/Mail';
 import Dashboard from './Dashboard';
-import Parser from './Parser';
+import Parser from './Parser/Parser';
 
 
 
