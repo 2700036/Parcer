@@ -20,6 +20,8 @@ import numberToWordsRu from 'number-to-words-ru';
 import { useForm } from 'react-hook-form';
 import useStyles from './styles';
 import ParsedSumm from './ParsedSumm';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import CopiedToCBAlert from '../CopiedToCBAlert';
 
 const splitters = {
   rub: ' руб',
@@ -38,18 +40,17 @@ const Parser = () => {
   const [VAT, setVAT] = useState(20);
   const [currency, setCurrency] = useState('rub');
   const [parsedList, setParsedList] = useState([]);
+  const [isCopied, setIsCopied] = useState(false);
 
   const handleInputChange = ({ target: { value } }) => {
-    let numbersOnly = value.replace(/[^0-9.,]+/gm, '')
-    if(numbersOnly){
-      numbersOnly = numbersOnly
-      .match(/^\d+([\.,]?\d?\d?)/gm)[0]
-      .slice(0, 25);
+    let numbersOnly = value.replace(/[^0-9.,]+/gm, '');
+    if (numbersOnly) {
+      numbersOnly = numbersOnly.match(/^\d+([\.,]?\d?\d?)/gm)[0].slice(0, 25);
       setSumm(numbersOnly.replace(/,+/gm, '.'));
     } else {
       setSumm(numbersOnly);
     }
-    summInput.current.value = numbersOnly;    
+    summInput.current.value = numbersOnly;
   };
   const handleCheckVAT = ({ target }) => {
     setWithVAT(target.checked);
@@ -80,7 +81,7 @@ const Parser = () => {
     const parsed = finalizeResult(summ);
     setParsedList([...parsedList, parsed]);
   };
-  const deleteParsedItem = (i) => {    
+  const deleteParsedItem = (i) => {
     setParsedList((state) => {
       return state.filter((el, ind) => ind !== i);
     });
@@ -157,7 +158,12 @@ const Parser = () => {
             </FormControl>
           </Box>
         </Box>
-        {summ && <Typography className={classes.result}>{finalizeResult(summ)}</Typography>}
+        {summ && (
+          <CopyToClipboard text={finalizeResult(summ)} onCopy={() => setIsCopied(true)}>
+            <Typography className={classes.result}>{finalizeResult(summ)}</Typography>
+          </CopyToClipboard>
+        )}
+
         {parsedList.length > 0 && (
           <List>
             {parsedList.map((s, i) => (
@@ -166,6 +172,13 @@ const Parser = () => {
           </List>
         )}
       </Container>
+      <CopiedToCBAlert open={isCopied} 
+      onClose={() => setIsCopied(false)} 
+      autoHideDuration={2000} 
+      elevation={6}
+      variant="filled" 
+      severity='success'
+      />
     </>
   );
 };

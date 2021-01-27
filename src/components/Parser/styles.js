@@ -36,7 +36,9 @@ const useStyles = makeStyles((theme) => ({
   },
   result: {
     margin: `${theme.spacing(6)}px 0`,
-    fontSize: theme.spacing(2.2)
+    fontSize: theme.spacing(2.2),
+    userSelect: 'none',
+    cursor: 'pointer'
   },
   addButton: {
     position: 'absolute',    

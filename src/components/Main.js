@@ -10,7 +10,7 @@ import {
   Toolbar,
 } from '@material-ui/core';
 
-import MailIcon from '@material-ui/icons/Mail';
+import TextRotationNoneIcon from '@material-ui/icons/TextRotationNone';
 import Dashboard from './Dashboard';
 import Parser from './Parser/Parser';
 
@@ -53,7 +53,7 @@ const Main = () => {
             <Link to='/parser' className={classes.listItem}>
           <ListItem button>
             <ListItemIcon>
-              <MailIcon />
+              <TextRotationNoneIcon />
             </ListItemIcon>
             <ListItemText >Парсер</ListItemText>
           </ListItem>
