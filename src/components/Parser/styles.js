@@ -17,19 +17,17 @@ const useStyles = makeStyles((theme) => ({
   form: {
     position: 'relative',
     display: 'grid',
-    gridTemplateColumns: 'auto 90px'
+    gridTemplateColumns: 'auto 100px',
+    gap: theme.spacing(2)
   },
   currency: {
     height: '53px',
     alignSelf: 'end',
-    marginRight: theme.spacing(5.5)
+    marginRight: theme.spacing(7)
   },
   VATBox: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    '& label': {
-      alignSelf: 'end'
-    }
   },
   VATValue: {    
     minWidth: 70,
@@ -48,6 +46,10 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey[500],
     zIndex: theme.zIndex.drawer + 1,
   },
+  parsedItem: {
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(11),
+  }
 }));
 
 export default useStyles;

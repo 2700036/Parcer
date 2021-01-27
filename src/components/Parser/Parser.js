@@ -7,16 +7,19 @@ import {
   Box,
   FormControlLabel,
   Checkbox,
+  Switch,
   MenuItem,
   Select,
   FormControl,
   InputLabel,
   IconButton,
+  List,
 } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import numberToWordsRu from 'number-to-words-ru';
 import { useForm } from 'react-hook-form';
 import useStyles from './styles';
+import ParsedSumm from './ParsedSumm';
 
 const splitters = {
   rub: ' руб',
@@ -34,11 +37,19 @@ const Parser = () => {
   const [summ, setSumm] = useState('');
   const [VAT, setVAT] = useState(20);
   const [currency, setCurrency] = useState('rub');
+  const [parsedList, setParsedList] = useState([]);
 
   const handleInputChange = ({ target: { value } }) => {
-    const numbersOnly = value.replace(/[^0-9.,]+/gm, '').match(/^\d+([\.,]?\d?\d?)/gm,)[0].slice(0, 25);
+    let numbersOnly = value.replace(/[^0-9.,]+/gm, '')
+    if(numbersOnly){
+      numbersOnly = numbersOnly
+      .match(/^\d+([\.,]?\d?\d?)/gm)[0]
+      .slice(0, 25);
+      setSumm(numbersOnly.replace(/,+/gm, '.'));
+    } else {
+      setSumm(numbersOnly);
+    }
     summInput.current.value = numbersOnly;    
-    setSumm(numbersOnly.replace(/,+/gm, '.'));
   };
   const handleCheckVAT = ({ target }) => {
     setWithVAT(target.checked);
@@ -66,7 +77,13 @@ const Parser = () => {
     return `${joinedResult}.`;
   };
   const onSubmit = (data) => {
-    console.log(finalizeResult(summ));
+    const parsed = finalizeResult(summ);
+    setParsedList([...parsedList, parsed]);
+  };
+  const deleteParsedItem = (i) => {    
+    setParsedList((state) => {
+      return state.filter((el, ind) => ind !== i);
+    });
   };
 
   return (
@@ -117,7 +134,8 @@ const Parser = () => {
           <Box className={classes.VATBox}>
             <FormControlLabel
               control={
-                <Checkbox checked={withVAT} onChange={handleCheckVAT} name='withVAT' color='primary' />
+                // <Checkbox checked={withVAT} onChange={handleCheckVAT} name='withVAT' color='primary' />
+                <Switch checked={withVAT} onChange={handleCheckVAT} name='withVAT' color='primary' />
               }
               label='с НДС'
             />
@@ -132,6 +150,7 @@ const Parser = () => {
                 value={VAT}
                 onChange={handleVAT}
               >
+                {/* {Array(20).fill(0).map((el,i) => <MenuItem key={i} value={++i}>{`${++i}%`}</MenuItem>)} */}
                 <MenuItem value={20}>20%</MenuItem>
                 <MenuItem value={18}>18%</MenuItem>
               </Select>
@@ -139,6 +158,13 @@ const Parser = () => {
           </Box>
         </Box>
         {summ && <Typography className={classes.result}>{finalizeResult(summ)}</Typography>}
+        {parsedList.length > 0 && (
+          <List>
+            {parsedList.map((s, i) => (
+              <ParsedSumm key={i} text={s} deleteItem={() => deleteParsedItem(i)} />
+            ))}
+          </List>
+        )}
       </Container>
     </>
   );
