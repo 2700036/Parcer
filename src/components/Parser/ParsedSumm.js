@@ -14,7 +14,7 @@ export default function ParsedSumm({ text, deleteItem }) {
       secondaryAction: classes.parsedItem,
     }}>
       <ListItemText primary={text} />
-      <ListItemSecondaryAction>
+      <ListItemSecondaryAction className={classes.parsedItemGroupButtons}>
       <CopyToClipboard  text={text}>
         <IconButton edge='end' aria-label='copy'>
           <FileCopyIcon />

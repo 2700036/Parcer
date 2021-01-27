@@ -47,8 +47,16 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
   },
   parsedItem: {
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(11),
+    paddingLeft: theme.spacing(1),    
+    [theme.breakpoints.up('sm')]: {
+      paddingRight: theme.spacing(11)
+    }
+  },
+  parsedItemGroupButtons: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'flex',
+      flexDirection: 'column',
+    }
   }
 }));
 
